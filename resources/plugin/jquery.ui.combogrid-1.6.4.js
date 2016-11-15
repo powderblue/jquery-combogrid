@@ -1,11 +1,11 @@
 /*
- * jQuery UI Combogrid 1.6.3
+ * jQuery UI Combogrid 1.6.4
  *
  * Copyright 2011 D'Alia Sara
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * 
+ *
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
@@ -13,6 +13,39 @@
  *	jquery.i18n.properties.js
  */
 (function( $, undefined ) {
+
+/**
+ * removed jQueryUI .zIndex() replacement
+ * @see http://jqueryui.com/changelog/1.12.0
+ */
+jQuery.fn.cg_zIndex = function (zIndex) {
+	if (zIndex !== undefined) {
+		return this.css("zIndex", zIndex);
+	}
+
+	if (this.length) {
+		var elem = $(this[0]), position, value;
+		while (elem.length && elem[0] !== document) {
+			// Ignore z-index if position is set to a value where z-index is ignored by the browser
+			// This makes behavior of this function consistent across browsers
+			// WebKit always returns auto if the element is positioned
+			position = elem.css("position");
+			if (position === "absolute" || position === "relative" || position === "fixed") {
+				// IE returns 0 when zIndex is not specified
+				// other browsers return a string
+				// we ignore the case of nested elements with an explicit value of 0
+				// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+				value = parseInt(elem.css("zIndex"), 10);
+				if (!isNaN(value) && value !== 0) {
+					return value;
+				}
+			}
+			elem = elem.parent();
+		}
+	}
+
+	return 0;
+}
 
 $.widget( "cg.combogrid", {
 	options: {
@@ -84,7 +117,7 @@ $.widget( "cg.combogrid", {
 						$.each(self.options.resetFields, function() {
 						$( ''+this ).val('');
 				 		});
-					} 
+					}
 				});
 			}
 			if (self.options.searchButton){
@@ -176,7 +209,7 @@ $.widget( "cg.combogrid", {
 		//Introduced in 1.5.1 to trigger search on DELETE input field
 		/*	// keypress is triggered before the input value is changed
 					clearTimeout( self.searching );
-					
+
 						self.searching = setTimeout(function() {
 						// only search if the value has changed
 							if ( self.term != self.element.val()) {
@@ -215,7 +248,7 @@ $.widget( "cg.combogrid", {
 					}
 					// keypress is triggered before the input value is changed
 					clearTimeout( self.searching );
-					
+
 						self.searching = setTimeout(function() {
 							// only search if the value has changed
 						//	if ( self.term != self.element.val()) {
@@ -223,7 +256,7 @@ $.widget( "cg.combogrid", {
 								self.search( null, event );
 						//	}
 						}, self.options.delay );
-					
+
 					break;
 				}
 			})
@@ -245,7 +278,7 @@ $.widget( "cg.combogrid", {
 				if ( self.options.disabled ) {
 					return;
 				}
-				//preventing from closing when a button trigger a search 
+				//preventing from closing when a button trigger a search
 				if(self.options.searchButton){
 					if(self.menucombo.element.is(":visible")){
 						clearTimeout( self.searching );
@@ -321,7 +354,7 @@ $.widget( "cg.combogrid", {
 						$( document ).one( 'mousedown', function( event ) {
 							if ( event.target !== self.element[ 0 ] &&
 								event.target !== menuElement &&
-								!$.ui.contains( menuElement, event.target ) ) {
+								!$.contains( menuElement, event.target ) ) {
 								self.close();
 							}
 						});
@@ -393,7 +426,7 @@ $.widget( "cg.combogrid", {
 					}
 				}
 			})
-			.zIndex( this.element.zIndex() + 1 )
+			.cg_zIndex( this.element.cg_zIndex() + 1 )
 			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
 			.css({ top: 0, left: 0 })
 			.hide()
@@ -444,7 +477,7 @@ $.widget( "cg.combogrid", {
 		var self = this,
 			array,
 			url;
-		
+
 		if ( $.isArray(this.options.source) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
@@ -508,7 +541,7 @@ $.widget( "cg.combogrid", {
 	},
 
 	_response: function(records, total, content ) {
-		
+
 		if ( !this.options.disabled && content && content.length ) {
 			//content = this._normalize( content );
 			this._suggest(records, total, content );
@@ -543,7 +576,7 @@ $.widget( "cg.combogrid", {
 			this._trigger( "close", event );
 		}
 	},
-	
+
 	_change: function( event ) {
 		if ( this.previous !== this.element.val() ) {
 			this._trigger( "change", event, { item: this.selectedItem } );
@@ -574,7 +607,7 @@ $.widget( "cg.combogrid", {
 		var self = this;
 		var ul = this.menucombo.element
 			.empty()
-			.zIndex( this.element.zIndex() + 1 );
+			.cg_zIndex( this.element.cg_zIndex() + 1 );
 		$('.' +self.element.attr('id') +'.cg-keynav-next').unbind('click.combogrid');
 		$('.' +self.element.attr('id') +'.cg-keynav-prev').unbind('click.combogrid');
 		$('.' +self.element.attr('id') +'.cg-keynav-last').unbind('click.combogrid');
@@ -777,7 +810,7 @@ $.widget( "cg.combogrid", {
 			$('.' +self.element.attr('id') +'.cg-keynav-next').addClass("cg-state-disabled");
 			$('.' +self.element.attr('id') +'.cg-keynav-last').addClass("cg-state-disabled");
 		};
-		
+
 		$('.' +self.element.attr('id') +'.cg-keynav-next').bind('click.combogrid',function(){
 			if(self.page<total){
 				self.page++;
@@ -872,7 +905,7 @@ $.extend( $.cg.combogrid, {
 
 /*
  * jQuery UI Menu (not officially released)
- * 
+ *
  * This widget isn't yet finished and the API is subject to change. We plan to finish
  * it for the next release. You're welcome to give it a try anyway and give us feedback,
  * as long as you're okay with migrating your code later on. We can help with that, too.
@@ -908,7 +941,7 @@ $.widget("cg.menucombo", {
 			});
 		this.refresh();
 	},
-	
+
 	refresh: function() {
 		var self = this;
 
@@ -916,7 +949,7 @@ $.widget("cg.menucombo", {
 		var items = this.element.children("div:not(.cg-menu-item):not(#cg-divHeader):not(.cg-comboButton):has(div)")
 			.addClass("cg-menu-item")
 			.attr("role", "menuitem");
-		
+
 		items.children("div")
 			.addClass("ui-corner-all")
 			.attr("tabindex", -1)
