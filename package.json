@@ -1,0 +1,20 @@
+{
+  "name": "jquery-combogrid",
+  "version": "2.0.0",
+  "repository": "git@github.com:powderblue/jquery-combogrid.git",
+  "author": "Daniel Bettles <dan@powderblue.co.uk>",
+  "license": "(MIT OR GPL-2.0-or-later)",
+  "devDependencies": {
+    "concat": "^1.0.3",
+    "css-minify": "^2.1.0",
+    "jquery": "jquery/jquery#^3.6.0",
+    "jquery-i18n-properties": "jquery-i18n-properties/jquery-i18n-properties.git#^1.2.7",
+    "jquery-ui": "jquery/jquery-ui#^1.14.1",
+    "standard": "^17.1.2",
+    "uglify-js": "^3.19.3"
+  },
+  "scripts": {
+    "lint": "bin/lint.sh",
+    "build": "bin/build.sh"
+  }
+}

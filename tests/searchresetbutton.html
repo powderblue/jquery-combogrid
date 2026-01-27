@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Reset Button | Demos | ComboGrid</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../node_modules/jquery-ui/dist/themes/smoothness/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="../dist/css/smoothness/jquery.ui.combogrid.css"/>
+<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../dist/js/jquery.ui.combogrid.js"></script>
+<script>
+jQuery(document).ready(function(){
+    $( "#project" ).combogrid({
+        debug:true,
+        resetButton:true,
+        searchButton:true,
+        colModel: [{'columnName':'id','width':'10','label':'id'}, {'columnName':'name','width':'45','label':'title'},{'columnName':'author','width':'45','label':'author'}],
+        url: 'server.php',
+        select: function( event, ui ) {
+            $( "#project" ).val( ui.item.name );
+            return false;
+        }
+    });
+});
+</script>
+</head>
+<body>
+    <div>
+        <p>Click on the search button to open the menu. After select an item click on the reset button to reset field.</p><br/>
+        <div style="float:left"><input size="30" id="project"/></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en-GB">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+
+        <title>I18n | Demos | ComboGrid</title>
+
+        <link rel="stylesheet" href="../node_modules/jquery-ui/dist/themes/smoothness/jquery-ui.min.css">
+        <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="../node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
+        <script src="../node_modules/jquery-i18n-properties/jquery.i18n.properties.min.js"></script>
+
+        <link rel="stylesheet" href="../dist/css/smoothness/jquery.ui.combogrid.css">
+        <script src="../dist/js/jquery.ui.combogrid.js"></script>
+    </head>
+
+    <body>
+        <div>
+            <div style="float: left">
+                <input type="text" placeholder="Type anything" id="project" style="width: 200px">
+            </div>
+
+            <div>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="it">Italian</option>
+                </select>
+            </div>
+        </div>
+
+        <script>
+            jQuery.i18n.properties({
+                name: 'combogrid',
+                path: '../dist/i18n/',
+                mode: 'both',
+                language: 'en'
+            });
+
+            jQuery('#project').combogrid({
+                debug: true,
+                i18n: true,
+                colModel: [
+                    {'columnName': 'id', 'width': '10', 'label': 'id'},
+                    {'columnName': 'name', 'width': '45', 'label': 'title'},
+                    {'columnName': 'author', 'width': '45', 'label': 'author'}
+                ],
+                url: 'server.php',
+                select: function (ignore, ui) {
+                    jQuery('#project').val(ui.item.name);
+
+                    return false;
+                }
+            });
+
+            jQuery('#language').on('change', function () {
+                jQuery.i18n.properties({
+                    name: 'combogrid',
+                    path: '../dist/i18n/',
+                    mode: 'both',
+                    language: jQuery('#language').val()
+                });
+            });
+        </script>
+    </body>
+</html>

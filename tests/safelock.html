@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Safe Lock | Demos | ComboGrid</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../node_modules/jquery-ui/dist/themes/smoothness/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="../dist/css/smoothness/jquery.ui.combogrid.css"/>
+<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../dist/js/jquery.ui.combogrid.js"></script>
+<script>
+jQuery(document).ready(function(){
+    //"keyup" event handler to reset input fields
+    $(document).on('keyup', "#project", function (e) {
+        //Improved with keycode checking to prevent extra typing after select
+        var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+        var keyCode = $.ui.keyCode;
+        if(key != keyCode.ENTER && key != keyCode.LEFT && key != keyCode.RIGHT && key != keyCode.DOWN) {
+            $('#project-id').val("");
+        }
+    });
+
+    $( "#project" ).combogrid({
+        debug:true,
+        okIcon:true,
+        autoChoose:true,
+        colModel: [{'columnName':'id','hide':true,'width':'10','label':'id'}, {'columnName':'name','width':'45','label':'title'},{'columnName':'author','width':'45','label':'author'}],
+        url: 'server.php',
+        //"select item" event handler to set input fields
+        select: function( event, ui ) {
+            $( "#project" ).val( ui.item.name );
+            $( "#project-id" ).val( ui.item.id );
+            return false;
+        }
+    });
+});
+</script>
+</head>
+<body>
+    <div>
+        <div style="float:left">
+            <p>Type "j" to open the menu. After select an item click "DEL" keyboard button or try typing something else: hidden field will be deleted and a nice icon appears.<br/>
+            "keyup" event handler + "okIcon" option are particularly useful if hidden field is required.</p>
+            <input size="4" readonly="readonly" type="text" id="project-id"/>
+            <input size="30" id="project"/>
+        </div>
+    </div>
+</body>
+</html>

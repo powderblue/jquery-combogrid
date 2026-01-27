@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-GB">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+
+        <title>Minimal Config | Demos | ComboGrid</title>
+
+        <link rel="stylesheet" href="../node_modules/jquery-ui/dist/themes/smoothness/jquery-ui.min.css">
+        <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="../node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
+
+        <link rel="stylesheet" href="../dist/css/smoothness/jquery.ui.combogrid.css">
+        <script src="../dist/js/jquery.ui.combogrid.js"></script>
+    </head>
+
+    <body>
+        <div>
+            <div>
+                <input type="text" placeholder="Type anything" id="project" style="width: 200px">
+            </div>
+        </div>
+
+        <script>
+            jQuery('#project').combogrid({
+                url: 'server.php',
+                debug: true,
+                colModel: [
+                    {columnName: 'id', width: '10', label: 'id'},
+                    {columnName: 'name', width: '60', label: 'title'},
+                    {columnName: 'author', width: '30', label: 'author'}
+                ],
+                select: function (ignore, ui) {
+                    jQuery('#project').val(ui.item.name);
+
+                    return false;
+                }
+            });
+        </script>
+    </body>
+</html>
